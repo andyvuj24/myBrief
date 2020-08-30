@@ -1,7 +1,8 @@
-var express = require("express");
-var router = express.Router();
-var Parser = require("rss-parser");
-let config = require("./config.json")
+const express = require("express");
+const router = express.Router();
+const Parser = require("rss-parser");
+const imaps = require("imap-simple");
+const config = require("./config.json");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -20,7 +21,29 @@ router.get("/", function (req, res, next) {
 });
 
 router.get("/unread", function (req, res, next) {
-  var imaps = require("imap-simple");
+  try {
+    const connection = await imaps.connect(config)
+    await connection.openBox("INBOX")
+  
+    const searchCriteria = ["UNSEEN"]
+    const fetchOptions = {
+      bodies: ["HEADER", "TEXT"],
+      markSeen: false
+    }
+
+    const results = await connection.search(searchCriteria, fetchOptions)
+
+    const subjects = results.map(
+      ({ parts }) => parts.filter(
+        ({which}) => which === 'HEADER'
+      )[0].body.subject[0]
+    )
+
+    res.json(subjects)
+  } catch (e) {
+    console.error(e)
+  }
+
   function getUnread() {
     if (!config) return;
     return imaps.connect(config).then( (connection) => {
@@ -47,7 +70,7 @@ router.get("/unread", function (req, res, next) {
     }).catch(err => console.log(err));
   }
 
-  getUnread().then((result) => res.json(result));
+  // getUnread().then((result) => res.json(result));
 });
 
 module.exports = router;
