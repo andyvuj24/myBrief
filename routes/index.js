@@ -23,8 +23,8 @@ router.get("/unread", function (req, res, next) {
   var imaps = require("imap-simple");
   function getUnread() {
     if (!config) return;
-    return imaps.connect(config).then(function (connection) {
-      return connection.openBox("INBOX").then(function () {
+    return imaps.connect(config).then( (connection) => {
+      return connection.openBox("INBOX").then(() => {
         var searchCriteria = ["UNSEEN"];
 
         var fetchOptions = {
@@ -34,9 +34,9 @@ router.get("/unread", function (req, res, next) {
 
         return connection
           .search(searchCriteria, fetchOptions)
-          .then(function (results) {
-            var subjects = results.map(function (res) {
-              return res.parts.filter(function (part) {
+          .then((results) => {
+            var subjects = results.map((res) => {
+              return res.parts.filter((part) => {
                 return part.which === "HEADER";
               })[0].body.subject[0];
             });
