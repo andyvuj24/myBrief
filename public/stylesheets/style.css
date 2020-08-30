@@ -1,0 +1,124 @@
+html {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+body {
+  /* padding: 50px; */
+  /* font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; */
+  font-family: "Roboto", sans-serif;
+  background: #f0f0f0;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  grid-template-rows: 33% 33% 33%;
+  width: 100%;
+  height: 100%;
+}
+
+.feed1 {
+  background-color: rgb(245, 245, 245);
+  grid-column-start: 0;
+  grid-column-end: span 1;
+  grid-row-end: span 3;
+  /* background-color: red; */
+  box-shadow: 0px 0px 25px #dbdbdb;
+  border-radius: 100px;
+  padding: 10px 50px;
+  margin: 15px;
+  overflow: hidden;
+}
+
+.feed2 {
+  background-color: rgb(245, 245, 245);
+  grid-column-start: 2;
+  grid-column-end: 2;
+  grid-row-end: span 3;
+  /* background-color: red; */
+  box-shadow: 0px 0px 25px #dbdbdb;
+  border-radius: 100px;
+  padding: 10px 50px;
+  margin: 15px;
+}
+
+.widget1 {
+  background-color: rgb(245, 245, 245);
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 1;
+  /* background-color: red; */
+  box-shadow: 0px 0px 25px #dbdbdb;
+  border-radius: 100px;
+  padding: 10px 50px;
+  margin: 15px;
+}
+
+.widget2 {
+  background-color: rgb(245, 245, 245);
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 2;
+  /* background-color: red; */
+  box-shadow: 0px 0px 25px #dbdbdb;
+  border-radius: 100px;
+  padding: 10px 50px;
+  margin: 15px;
+}
+
+.widget3 {
+  background-color: rgb(245, 245, 245);
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 4;
+  /* background-color: red; */
+  box-shadow: 0px 0px 25px #dbdbdb;
+  border-radius: 100px;
+  padding: 10px 50px;
+  margin: 15px;
+}
+
+h1 {
+  color: #7c4dff;
+  font-weight: 900;
+}
+
+#newsFeed {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.newsItem {
+  background-color: rgb(245, 245, 245);
+  margin: 10px;
+}
+
+#emailApp {
+  display: grid;
+  grid-template-columns: 66% 33%;
+  grid-template-rows: 100%;
+
+}
+
+.emailCol1 {
+  grid-column-start: 1;
+  grid-column-end: 1;
+}
+
+.emailCol2 {
+  grid-column-start: 2;
+  grid-column-end: 2;
+}

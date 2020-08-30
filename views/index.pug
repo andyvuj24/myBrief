@@ -1,0 +1,83 @@
+block head
+  block meta
+    title myBrief
+    meta(name='description' content='myBrief - personal briefing page with current information for the day')
+    meta(name='robots' content='index, follow')
+
+  block scripts
+    script(src="./javascripts/vue.js")
+  block links
+    link(rel="stylesheet" href="./stylesheets/style.css")
+    link(href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap' rel='stylesheet')
+block content
+  .container(id="app")
+    .feed1
+      h1 News Feed
+      ul#newsFeed
+        li(class="newsItem" v-for='item in newsData' :key='item.id') {{item.text}} <hr>
+    .feed2
+      h1 Agenda
+    .widget1
+      h1 Email
+      #emailApp
+        .emailCol1
+          ul
+            li(class="unreadEmail" v-for='(item, idx) in unreads' :key='undreads') {{item}}
+        .emailCol2
+          span(class="emailCounter") {{unreads.length}}
+          span  unread emails
+    .widget2
+      h1 Tasks
+      span test
+    .widget3
+      h1 Weather
+  block buttScripts
+    script.
+      var news = new Vue({
+        el: "#newsFeed",
+        data: (function() {
+          return {'newsData': !{data}}
+        })()
+      });
+
+      async function getEmails2() {
+        let res = await fetch("/unread");
+        let obj = await res.json();
+        console.log(obj);
+        var emails = new Vue({
+          el: "#emailApp",
+          data: obj
+        });
+      }
+      //- getEmails2();
+
+      var emails = new Vue({
+        data() {
+          return {
+            unreads: []
+          }
+        },
+        created() {
+          console.log("RAN!");
+          this.getEmails();
+        },
+        methods: {
+          async getEmails() {
+            let res = await fetch("/unread");
+            let obj = await res.json();
+            this.unreads = obj
+          }
+        }
+      })
+
+      document.addEventListener('DOMContentLoaded', fixCalDimensions);
+      window.onresize = fixCalDimensions;
+
+      function fixCalDimensions() {
+        var iframe = document.querySelector("iframe")
+        iframe.width = document.querySelector(".feed2").offsetWidth - 100
+        iframe.height = document.querySelector(".feed2").offsetHeight - 120
+      }
+
+      //- let emails = await fetch("/unread").then(res => { return res.json() });
+
