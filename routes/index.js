@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var Parser = require("rss-parser");
+let config = require("./config.json")
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -20,10 +21,6 @@ router.get("/", function (req, res, next) {
 
 router.get("/unread", function (req, res, next) {
   var imaps = require("imap-simple");
-  var config;
-  fs.readFile("config.json", (err,data) => {
-    config = JSON.parse(data);
-  })
   function getUnread() {
     if (!config) return;
     return imaps.connect(config).then(function (connection) {
