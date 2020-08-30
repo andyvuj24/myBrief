@@ -20,8 +20,12 @@ router.get("/", function (req, res, next) {
 
 router.get("/unread", function (req, res, next) {
   var imaps = require("imap-simple");
-
+  var config;
+  fs.readFile("config.json", (err,data) => {
+    config = JSON.parse(data);
+  })
   function getUnread() {
+    if (!config) return;
     return imaps.connect(config).then(function (connection) {
       return connection.openBox("INBOX").then(function () {
         var searchCriteria = ["UNSEEN"];
