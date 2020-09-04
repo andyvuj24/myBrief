@@ -6,7 +6,9 @@ var router = express.Router();
 
 var Parser = require("rss-parser");
 
-var config = require("./config.json");
+var imaps = require("imap-simple");
+
+var config = require("./config.json").config;
 /* GET home page. */
 
 
@@ -45,35 +47,53 @@ router.get("/", function (req, res, next) {
     });
   })();
 });
-router.get("/unread", function (req, res, next) {
-  var imaps = require("imap-simple");
+router.get("/unread", function _callee2(req, res, next) {
+  var connection, searchCriteria, fetchOptions, results, subjects;
+  return regeneratorRuntime.async(function _callee2$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          _context2.prev = 0;
+          _context2.next = 3;
+          return regeneratorRuntime.awrap(imaps.connect(config));
 
-  function getUnread() {
-    if (!config) return;
-    return imaps.connect(config).then(function (connection) {
-      return connection.openBox("INBOX").then(function () {
-        var searchCriteria = ["UNSEEN"];
-        var fetchOptions = {
-          bodies: ["HEADER", "TEXT"],
-          markSeen: false
-        };
-        return connection.search(searchCriteria, fetchOptions).then(function (results) {
-          var subjects = results.map(function (res) {
-            return res.parts.filter(function (part) {
-              return part.which === "HEADER";
+        case 3:
+          connection = _context2.sent;
+          _context2.next = 6;
+          return regeneratorRuntime.awrap(connection.openBox("INBOX"));
+
+        case 6:
+          searchCriteria = ["UNSEEN"];
+          fetchOptions = {
+            bodies: ["HEADER", "TEXT"],
+            markSeen: false
+          };
+          _context2.next = 10;
+          return regeneratorRuntime.awrap(connection.search(searchCriteria, fetchOptions));
+
+        case 10:
+          results = _context2.sent;
+          subjects = results.map(function (_ref) {
+            var parts = _ref.parts;
+            return parts.filter(function (_ref2) {
+              var which = _ref2.which;
+              return which === 'HEADER';
             })[0].body.subject[0];
-          }); // return { unread: subjects };
+          });
+          res.json(subjects);
+          _context2.next = 18;
+          break;
 
-          return subjects;
-        });
-      });
-    })["catch"](function (err) {
-      return console.log(err);
-    });
-  }
+        case 15:
+          _context2.prev = 15;
+          _context2.t0 = _context2["catch"](0);
+          console.error(_context2.t0);
 
-  getUnread().then(function (result) {
-    return res.json(result);
-  });
+        case 18:
+        case "end":
+          return _context2.stop();
+      }
+    }
+  }, null, null, [[0, 15]]);
 });
 module.exports = router;
